@@ -4,13 +4,12 @@ import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firest
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import {User} from '../shared/clases/user'
+import * as firebase from 'firebase';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  
   userData: any;
 
   constructor(
@@ -35,7 +34,6 @@ export class AuthService {
   SignIn(email, password) {
     return this.ngFireAuth.signInWithEmailAndPassword(email, password);
   }
-
 
   // Recover password
   PasswordRecover(passwordResetEmail) {
@@ -79,5 +77,9 @@ export class AuthService {
       localStorage.removeItem("user");
       this.router.navigate(["login"]);
     });
+  }
+
+  getCurrentUserId(): string {
+    return firebase.auth().currentUser ? firebase.auth().currentUser.uid : null;
   }
 }

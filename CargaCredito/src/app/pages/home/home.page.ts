@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import { AuthService } from 'src/app/services/auth.service';
+import { CreditosService } from 'src/app/services/creditos.service';
+import {BalanceUsuarios} from '../../shared/clases/balanceUsuarios';
 
+declare let window: any; // Don't forget this part!
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -8,33 +11,43 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 })
 export class HomePage {
 
-  constructor(private qrScanner: QRScanner) {}
+  readResult: String;
+  qrCodes: any  = {
+    diez: "8c95def646b6127282ed50454b73240300dccabc",
+    cincuenta: "ae338e4e0cbb4e4bcffaf9ce5b409feb8edd5172",
+    cien: "2786f4877b9091dcad7f35751bfcf5d5ea712b2f"
+  }
+  balanceList: any;
+  currentUid: string;
 
-  cargarCredito(){
-      // Optionally request the permission early
-  this.qrScanner.prepare()
-  .then((status: QRScannerStatus) => {
-    if (status.authorized) {
-      // camera permission was granted
+  ionViewWillEnter(){
+    this.currentUid = this.authSrv.getCurrentUserId();
+    this.balanceList = this.creditosSrv.getBalanceByUid(this.currentUid);
+    console.log(this.balanceList);
+  }
 
+  constructor(public creditosSrv: CreditosService, public authSrv: AuthService) {}
 
-      // start scanning
-      let scanSub = this.qrScanner.scan().subscribe((text: string) => {
-        console.log('Scanned something', text);
+  ReadQrCode(){
 
-        this.qrScanner.hide(); // hide camera preview
-        scanSub.unsubscribe(); // stop scanning
-      });
+     /*  // Optionally request the permission early
+      window.cordova.plugins.barcodeScanner.scan(
+        result => {
+          console.log(result);
+          this.CargarCreditos(result.text);
+        },
+        err => console.error(err),
+        {
+          showTorchButton: true,
+          prompt: "Scan your code",
+          formats: "QR_CODE",
+          resultDisplayDuration: 0
+        }
+      ); */
+  }
 
-    } else if (status.denied) {
-      // camera permission was permanently denied
-      // you must use QRScanner.openSettings() method to guide the user to the settings page
-      // then they can grant the permission from there
-    } else {
-      // permission was denied, but not permanently. You can ask for permission again at a later time.
-    }
-  })
-  .catch((e: any) => console.log('Error is', e));
+  CargarCreditos(qrtext: string){
+
   }
 
 }

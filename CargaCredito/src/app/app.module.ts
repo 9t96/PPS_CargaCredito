@@ -15,7 +15,6 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from 'src/environments/environment';
 import { ReactiveFormsModule } from '@angular/forms';
-import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -29,8 +28,7 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    QRScanner
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
 })
