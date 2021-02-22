@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { CreditosService } from 'src/app/services/creditos.service';
 import {BalanceUsuarios} from '../../shared/clases/balanceUsuarios';
@@ -17,19 +18,25 @@ export class HomePage {
     cincuenta: "ae338e4e0cbb4e4bcffaf9ce5b409feb8edd5172",
     cien: "2786f4877b9091dcad7f35751bfcf5d5ea712b2f"
   }
-  balanceList: any;
+  balanceUsuario: BalanceUsuarios;
   currentUid: string;
+
 
   ionViewWillEnter(){
     this.currentUid = this.authSrv.getCurrentUserId();
-    this.balanceList = this.creditosSrv.getBalanceByUid(this.currentUid);
-    console.log(this.balanceList);
+    console.log(this.currentUid);
+    this.creditosSrv.getBalanceByUid(this.currentUid).subscribe( balance =>{
+      this.balanceUsuario = balance;
+      console.log(balance);
+
+    })
   }
 
   constructor(public creditosSrv: CreditosService, public authSrv: AuthService) {}
-
+ 
   ReadQrCode(){
 
+    
      /*  // Optionally request the permission early
       window.cordova.plugins.barcodeScanner.scan(
         result => {

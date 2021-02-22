@@ -80,6 +80,6 @@ export class AuthService {
   }
 
   getCurrentUserId(): string {
-    return firebase.auth().currentUser ? firebase.auth().currentUser.uid : null;
+    return JSON.parse(localStorage.getItem("user")).uid;
   }
 }

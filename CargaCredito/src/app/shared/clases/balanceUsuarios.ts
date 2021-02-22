@@ -1,5 +1,5 @@
 export interface BalanceUsuarios{
     balance: string;
-    codes: Array<any>;
-    id: any;
+    codigos: Array<any>;
+    doc_id: string;
 }

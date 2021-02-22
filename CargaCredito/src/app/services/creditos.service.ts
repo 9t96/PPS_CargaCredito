@@ -16,6 +16,7 @@ export class CreditosService {
   }
 
   getBalanceByUid(uid: string) {
+    return this.dbRef.doc<BalanceUsuarios>(uid).valueChanges({idField: 'doc_id'});
   }
 
   updateDatabase(id, saldo) {
