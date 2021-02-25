@@ -10,18 +10,25 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
   <div id="container">
-    <ion-title>
-      {{readResult}}
-    </ion-title>
-    <ion-button (click)="ReadQrCode()">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title class="ion-text-left"><ion-icon name="wallet-outline"></ion-icon>Balance</ion-card-title>
+      </ion-card-header>
+    
+      <ion-card-content class="card-content">
+        {{balanceUsuario.balance}} Creditos
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button expand="block" size="default" color="primary" (click)="ReadQrCode()">
+      <ion-icon name="qr-code-outline"></ion-icon>
       Cargar credito
+    </ion-button>    
+    <ion-button expand="block" size="default" color="danger" (click)="LimpiarCreditos()">
+      <ion-icon name="qr-code-outline"></ion-icon>
+      Limpiar Creditos
     </ion-button>
   </div>
 </ion-content>
