@@ -3,14 +3,15 @@ import { auth } from 'firebase/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import {User} from '../shared/clases/user'
+import { User } from '../shared/clases/user'
 import * as firebase from 'firebase';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  userData: any;
+  userData: User;
 
   constructor(
     public afStore: AngularFirestore,
@@ -54,21 +55,9 @@ export class AuthService {
     const user = JSON.parse(localStorage.getItem("user"));
     return user !== null && user.emailVerified !== false ? true : false;
   }
-  // Store user in localStorage
-  SetUserData(user) {
-    const userRef: AngularFirestoreDocument<any> = this.afStore.doc(
-      `users/${user.uid}`
-    );
-    const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified
-    };
-    return userRef.set(userData, {
-      merge: true
-    });
+  // Get role
+  getUserRol(uid) {
+    return this.afStore.doc<User>(`users/${uid}`).valueChanges();
   }
 
   // Sign-out
@@ -82,4 +71,5 @@ export class AuthService {
   getCurrentUserId(): string {
     return JSON.parse(localStorage.getItem("user")).uid;
   }
+
 }

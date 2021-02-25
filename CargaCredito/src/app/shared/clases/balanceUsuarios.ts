@@ -1,5 +1,7 @@
 export interface BalanceUsuarios{
-    balance: string;
-    codigos: Array<any>;
+    balance: number;
+    totalDiez: number;
+    totalCincuenta: number;
+    totalCien: number;
     doc_id: string;
 }
