@@ -3,6 +3,7 @@ import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { AuthService } from "src/app/services/auth.service";
 import { CreditosService } from "src/app/services/creditos.service";
+import { ToastService } from "src/app/services/toast.service";
 import { BalanceUsuarios } from "../../shared/clases/balanceUsuarios";
 
 declare let window: any; // Don't forget this part!
@@ -45,13 +46,14 @@ export class HomePage implements OnInit{
   constructor(
     public creditosSrv: CreditosService,
     public authSrv: AuthService,
-    private router: Router
+    private router: Router,
+    public toastSrv: ToastService
   ) {
     this.showSpinner = true;
   }
 
   ReadQrCode() {
-     // Optionally request the permission early
+    // Optionally request the permission early
      window.cordova.plugins.barcodeScanner.scan(
        result => {
          console.log(result);
@@ -73,58 +75,59 @@ export class HomePage implements OnInit{
       switch (qrvalue) {
         case 10:
           this.balanceUsuario.totalDiez < 20
-            ? this.creditosSrv.updateDatabase(this.currentUid, {
+            ? (this.creditosSrv.updateDatabase(this.currentUid, {
                 balance: this.balanceUsuario.balance + 10,
                 totalDiez: this.balanceUsuario.totalDiez + 10,
-              })
-            : console.log("hola");
+              }), this.ShowtToastCargaOk())
+            : this.ShowtToastQrLimit();
           break;
         case 50:
           this.balanceUsuario.totalCincuenta < 100
-          ? this.creditosSrv.updateDatabase(this.currentUid, {
+          ? (this.creditosSrv.updateDatabase(this.currentUid, {
               balance: this.balanceUsuario.balance + 50,
               totalCincuenta: this.balanceUsuario.totalCincuenta + 50,
-            })
-          : console.log("hola");
+            }), this.ShowtToastCargaOk())
+          : this.ShowtToastQrLimit();
           break;
         case 100:
           this.balanceUsuario.totalCien < 200
-          ? this.creditosSrv.updateDatabase(this.currentUid, {
+          ? (this.creditosSrv.updateDatabase(this.currentUid, {
               balance: this.balanceUsuario.balance + 100,
               totalCien: this.balanceUsuario.totalCien + 100,
-            })
-          : console.log("hola");
+            }), this.ShowtToastCargaOk())
+          : this.ShowtToastQrLimit();
           break;
       }
     } else {
       switch (this.GetCodeValue(qrtext)) {
         case 10:
           this.balanceUsuario.totalDiez !== 10
-            ? this.creditosSrv.updateDatabase(this.currentUid, {
+            ? (this.creditosSrv.updateDatabase(this.currentUid, {
                 balance: this.balanceUsuario.balance + 10,
                 totalDiez: 10,
-              })
-            : console.log("hola");
+              }), this.ShowtToastCargaOk())
+            : this.ShowtToastQrLimit();
           break;
         case 50:
           this.balanceUsuario.totalCincuenta !== 50
-          ? this.creditosSrv.updateDatabase(this.currentUid, {
+          ? (this.creditosSrv.updateDatabase(this.currentUid, {
               balance: this.balanceUsuario.balance + 50,
               totalCincuenta: 50,
-            })
-          : console.log("hola");
+            }), this.ShowtToastCargaOk())
+          : this.ShowtToastQrLimit();
           break;
         case 100:
           this.balanceUsuario.totalCien !== 100
-          ? this.creditosSrv.updateDatabase(this.currentUid, {
+          ? (this.creditosSrv.updateDatabase(this.currentUid, {
               balance: this.balanceUsuario.balance + 100,
               totalCien: 100,
-            })
-          : console.log("hola");
+            }), this.ShowtToastCargaOk())
+          : this.ShowtToastQrLimit();
           break;
       }
     }
   }
+
   GetCodeValue(qr: string):number {
     switch (qr) {
       case "8c95def646b6127282ed50454b73240300dccabc":
@@ -137,6 +140,23 @@ export class HomePage implements OnInit{
         return 100;
         break;
     }
+  }
+
+  ShowtToastQrLimit(){
+    this.toastSrv.presentToastWithOptions({
+      message: 'Alcanzo el limite de cargas para este QR',
+      position: 'bottom',
+      duration: 2000
+    }
+    )
+  }
+  ShowtToastCargaOk(){
+    this.toastSrv.presentToastWithOptions({
+      message: 'El codigo se cargo correctamente',
+      position: 'bottom',
+      duration: 2000
+    }
+    )
   }
 
   Logout() {
