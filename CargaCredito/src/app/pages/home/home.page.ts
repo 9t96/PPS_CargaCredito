@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { AuthService } from "src/app/services/auth.service";
@@ -11,7 +11,7 @@ declare let window: any; // Don't forget this part!
   templateUrl: "home.page.html",
   styleUrls: ["home.page.scss"],
 })
-export class HomePage {
+export class HomePage implements OnInit{
   readResult: String;
   qrCodes: any = {
     diez: "8c95def646b6127282ed50454b73240300dccabc",
@@ -20,9 +20,10 @@ export class HomePage {
   };
   currentUid: string;
   userRol: string;
+  showSpinner: boolean;
   balanceUsuario: BalanceUsuarios = {balance: null, totalDiez: null, totalCincuenta: null, totalCien: null, doc_id: null};
 
-  ionViewWillEnter() {
+  ngOnInit() {
     this.currentUid = this.authSrv.getCurrentUserId();
     console.log(this.currentUid);
     this.creditosSrv.getBalanceByUid(this.currentUid).subscribe((userData) => {
@@ -31,6 +32,9 @@ export class HomePage {
       this.balanceUsuario.totalCincuenta = userData.totalCincuenta;
       this.balanceUsuario.totalDiez = userData.totalDiez;
       this.balanceUsuario.doc_id = userData.doc_id;
+      setTimeout(() => {
+        this.showSpinner = false;
+      }, 1000);
       console.log(this.balanceUsuario);
     });
     this.authSrv.getUserRol(this.currentUid).subscribe((userData) => {
@@ -42,11 +46,12 @@ export class HomePage {
     public creditosSrv: CreditosService,
     public authSrv: AuthService,
     private router: Router
-  ) {}
+  ) {
+    this.showSpinner = true;
+  }
 
   ReadQrCode() {
-    this.CargarCreditos(this.qrCodes.cincuenta);
-    /*  // Optionally request the permission early
+     // Optionally request the permission early
      window.cordova.plugins.barcodeScanner.scan(
        result => {
          console.log(result);
@@ -59,7 +64,7 @@ export class HomePage {
          formats: "QR_CODE",
          resultDisplayDuration: 0
        }
-     ); */
+     );
   }
 
   CargarCreditos(qrtext: string) {
@@ -137,5 +142,9 @@ export class HomePage {
   Logout() {
     this.authSrv.SignOut();
     this.router.navigate(["login"]);
+  }
+
+  LimpiarCreditos(){
+    this.creditosSrv.updateDatabase(this.currentUid,{ balance: 0, totalCien: 0, totalCincuenta: 0, totalDiez: 0});
   }
 }

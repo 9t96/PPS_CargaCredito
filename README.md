@@ -13,3 +13,9 @@ chrome://inspect/#devices
 
 seleccionar "inspect"
 
+Icon and splash
+
+npm install -g cordova-res
+
+cordova-res android --skip-config --copy
+

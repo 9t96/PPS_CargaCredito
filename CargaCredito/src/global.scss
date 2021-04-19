@@ -30,3 +30,8 @@ ion-app.has-camera ion-content {
   --background: transparent;
   background: transparent !important;
 }
+
+.toast-danger{
+  --background: var(--ion-color-danger);
+  --color: var(--ion-color-light);
+}

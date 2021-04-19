@@ -1,0 +1,64 @@
+ion-content {
+  --background: var(--ion-color-dark);
+  //--background: linear-gradient(52deg, rgba(25,36,40,1) 24%, rgba(17,81,107,1) 100%, rgba(45,56,60,1) 100%);
+  //--background: var(--ion-color-dark)
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+ion-item {
+  --background: transparent;
+  color: var(--ion-color-primary);
+  --border: 1px solid var(--ion-color-primary);
+  border-radius: 10px;
+  box-shadow: 0px 9px 34px 0px rgba(119, 205, 233, 0.55);
+  -webkit-box-shadow: 0px 9px 34px 0px rgba(119, 205, 233, 0.55);
+  -moz-box-shadow: 0px 9px 34px 0px rgba(119, 205, 233, 0.55);
+  margin-bottom: 0.3em;
+
+  ion-icon {
+    align-self: center;
+  }
+}
+
+.welcome {
+  display: flex;
+  justify-content: center;
+  width: 50%;
+  background: var(--ion-color-secondary);
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 0px 10px 10px 0px;
+  width: fit-content;
+  margin-bottom: 3em;
+  margin-top: 2em;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  ion-row {
+    img {
+      height: 4em;
+      margin-left: 1em;
+    }
+    ion-text {
+      align-self: center;
+      font-size: 26px;
+      margin-left: 1em;
+      margin-right: 1em;
+      font-weight: bold;
+    }
+  }
+}
+
+.hiddenItems {
+  height: 30px;
+}
+
+small {
+  padding-left: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  font-size: 14px;
+}
