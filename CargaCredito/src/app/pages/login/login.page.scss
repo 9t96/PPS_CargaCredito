@@ -1,3 +1,11 @@
+ion-header{
+  ion-toolbar{
+    ion-button{
+      margin-right: 1em;
+    }
+  }
+}
+
 ion-content {
   --background: var(--ion-color-dark);
   //--background: linear-gradient(52deg, rgba(25,36,40,1) 24%, rgba(17,81,107,1) 100%, rgba(45,56,60,1) 100%);
@@ -7,7 +15,7 @@ ion-content {
     padding-right: 10px;
   }
 }
-
+form{
 ion-item {
   --background: transparent;
   color: var(--ion-color-primary);
@@ -21,6 +29,7 @@ ion-item {
   ion-icon {
     align-self: center;
   }
+}
 }
 
 .welcome {
@@ -60,5 +69,16 @@ small {
   padding-left: 10px;
   margin-bottom: 10px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 15px;
+  color: red;
+}
+
+.test-buttons{
+  background: transparent;
+    ion-item{
+      --background: transparent;
+      ion-label{
+        margin-left: 1em;
+      }
+    }
 }

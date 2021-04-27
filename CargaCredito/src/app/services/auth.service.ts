@@ -5,13 +5,14 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { User } from '../shared/clases/user'
 import * as firebase from 'firebase';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { first, switchMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  userData: User;
+  public user$: Observable<User>;
 
   constructor(
     public afStore: AngularFirestore,
@@ -19,16 +20,14 @@ export class AuthService {
     public router: Router,
     public ngZone: NgZone
   ) {
-    this.ngFireAuth.authState.subscribe(user => {
-      if (user) {
-        this.userData = user;
-        localStorage.setItem("user", JSON.stringify(this.userData));
-        JSON.parse(localStorage.getItem("user"));
-      } else {
-        localStorage.setItem("user", null);
-        JSON.parse(localStorage.getItem("user"));
-      }
-    });
+    this.user$ = this.ngFireAuth.authState.pipe(
+      switchMap((user) => {
+        if (user) {
+          return this.afStore.doc(`users/${user.uid}`).valueChanges();
+        }
+        return of(null);
+      })
+    );
   }
 
   // Login in with email/password
@@ -68,8 +67,8 @@ export class AuthService {
     });
   }
 
-  getCurrentUserId(): string {
-    return JSON.parse(localStorage.getItem("user")).uid;
+  getCurrentUserId(): Observable<User> {
+    return this.ngFireAuth.authState.pipe(first());
   }
 
 }

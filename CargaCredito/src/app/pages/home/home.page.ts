@@ -14,33 +14,35 @@ declare let window: any; // Don't forget this part!
 })
 export class HomePage implements OnInit{
   readResult: String;
-  qrCodes: any = {
+  qrCodes: any = { 
     diez: "8c95def646b6127282ed50454b73240300dccabc",
     cincuenta: "ae338e4e0cbb4e4bcffaf9ce5b409feb8edd5172",
     cien: "2786f4877b9091dcad7f35751bfcf5d5ea712b2f",
   };
-  currentUid: string;
   userRol: string;
+  currentUid: any;
   showSpinner: boolean;
   balanceUsuario: BalanceUsuarios = {balance: null, totalDiez: null, totalCincuenta: null, totalCien: null, doc_id: null};
 
   ngOnInit() {
-    this.currentUid = this.authSrv.getCurrentUserId();
-    console.log(this.currentUid);
-    this.creditosSrv.getBalanceByUid(this.currentUid).subscribe((userData) => {
-      this.balanceUsuario.balance = userData.balance;
-      this.balanceUsuario.totalCien = userData.totalCien;
-      this.balanceUsuario.totalCincuenta = userData.totalCincuenta;
-      this.balanceUsuario.totalDiez = userData.totalDiez;
-      this.balanceUsuario.doc_id = userData.doc_id;
-      setTimeout(() => {
-        this.showSpinner = false;
-      }, 1000);
-      console.log(this.balanceUsuario);
-    });
-    this.authSrv.getUserRol(this.currentUid).subscribe((userData) => {
-      this.userRol = userData.rol;
-    });
+    const user$ = this.authSrv.getCurrentUserId().subscribe( data =>{
+      this.currentUid = data.uid;
+      this.creditosSrv.getBalanceByUid(this.currentUid).subscribe((userData) => {
+        this.balanceUsuario.balance = userData.balance;
+        this.balanceUsuario.totalCien = userData.totalCien;
+        this.balanceUsuario.totalCincuenta = userData.totalCincuenta;
+        this.balanceUsuario.totalDiez = userData.totalDiez;
+        this.balanceUsuario.doc_id = userData.doc_id;
+        setTimeout(() => {
+          this.showSpinner = false;
+        }, 1000);
+        console.log(this.balanceUsuario);
+      });
+      this.authSrv.getUserRol(this.currentUid).subscribe((userData) => {
+        this.userRol = userData.rol;
+      });
+    })
+    
   }
 
   constructor(

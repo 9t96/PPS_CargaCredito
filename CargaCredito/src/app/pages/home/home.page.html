@@ -11,22 +11,37 @@
 <ion-content [fullscreen]="true">
   <ion-card>
     <ion-card-header>
-      <ion-card-subtitle>Balance:</ion-card-subtitle>
-      <ion-row [ngClass]="{'icon-center': showSpinner}">
-
-          <ion-spinner *ngIf="showSpinner" name="circles" color="primary"></ion-spinner>
-
-        <h1 *ngIf="!showSpinner">{{balanceUsuario.balance}} Creditos</h1>
-      </ion-row>
+      <ion-card-subtitle>Usted tiene:</ion-card-subtitle>
     </ion-card-header>
+    <ion-card-content>
+<!--       <ion-spinner
+        *ngIf="showSpinner"
+        name="circles"
+        color="primary"
+      ></ion-spinner> -->
+      <img *ngIf="showSpinner" class="spinner" src="../../../assets/spinner.gif" alt="">
+
+      <h1 *ngIf="!showSpinner" class="amount">{{balanceUsuario.balance}}</h1>
+      <h1 *ngIf="!showSpinner" class="credits">Creditos</h1>
+    </ion-card-content>
   </ion-card>
   <div id="container">
-    <ion-button (click)="ReadQrCode()" expand="block" color="primary">
+    <ion-button
+      (click)="ReadQrCode()"
+      expand="block"
+      color="primary"
+      class="btn-cargar"
+    >
       <ion-icon name="qr-code-outline" color="dark"></ion-icon>
       <p>Cargar credito</p>
     </ion-button>
-    <ion-button (click)="LimpiarCreditos()" expand="block" color="danger">
-      <ion-icon name="trash-outline" color="light">lalala</ion-icon>
+    <ion-button
+      (click)="LimpiarCreditos()"
+      expand="block"
+      color="danger"
+      class="btn-limpiar"
+    >
+      <ion-icon name="trash-outline" color="light"></ion-icon>
       <p>Limpiar creditos</p>
     </ion-button>
   </div>
